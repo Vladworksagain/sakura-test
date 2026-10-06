@@ -1,19 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { flushPromises, mount } from "@vue/test-utils";
+import { createRouter, createWebHistory } from "vue-router";
 import { createVuetify } from "vuetify";
 
+import { routes } from "@/router/routes";
 import App from "../App.vue";
-
-const sampleApplication = {
-  id: "1",
-  title: "Document delivery",
-  type: "послуга",
-  status: "нова",
-  assignee: "Олена Коваль",
-  amount: 1500,
-  deadline: "2026-11-01",
-  createdAt: "2026-10-01T09:00:00.000Z",
-};
 
 describe("App", () => {
   beforeEach(() => {
@@ -25,32 +16,31 @@ describe("App", () => {
         disconnect() {}
       },
     );
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => [sampleApplication],
-      }),
-    );
   });
 
   afterEach(() => {
     vi.unstubAllGlobals();
   });
 
-  it("loads applications from the API", async () => {
+  it("renders page content in a container limited to 1440px", async () => {
+    const router = createRouter({
+      history: createWebHistory(),
+      routes,
+    });
     const wrapper = mount(App, {
       global: {
-        plugins: [createVuetify()],
+        plugins: [createVuetify(), router],
       },
     });
 
-    expect(wrapper.text()).toContain("Applications");
-
+    await router.isReady();
     await flushPromises();
 
-    expect(fetch).toHaveBeenCalledWith("/api/applications");
-    expect(wrapper.text()).toContain("Document delivery");
-    expect(wrapper.text()).toContain("Олена Коваль");
+    expect(wrapper.text()).toContain("Назва");
+    expect(wrapper.text()).toContain("Виконавець");
+    expect(wrapper.text()).toContain("Кількість");
+
+    const container = wrapper.get(".v-container");
+    expect(container.attributes("style")).toContain("max-width: 1440px");
   });
 });
