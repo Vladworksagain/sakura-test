@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 
+import { APPLICATION_STATUSES } from "../config/applicationStatuses";
 import db from "../../server/db.json";
 
 const TYPES = ["послуга", "товар"];
-const STATUSES = ["нова", "в роботі", "виконана", "скасована"];
+const STATUSES = APPLICATION_STATUSES.map((status) => status.value);
 
 describe("applications mock", () => {
   it("contains at least 50 applications with the expected shape", () => {
@@ -14,7 +15,7 @@ describe("applications mock", () => {
     for (const application of db.applications) {
       expect(application).toEqual(
         expect.objectContaining({
-          id: expect.any(String),
+          id: expect.any(Number),
           title: expect.any(String),
           assignee: expect.any(String),
           amount: expect.any(Number),

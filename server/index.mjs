@@ -3,7 +3,6 @@ import { resolve } from "node:path";
 import process from "node:process";
 import { watch } from "chokidar";
 import { createApp } from "json-server/lib/app.js";
-import { NormalizedAdapter } from "json-server/lib/adapters/normalized-adapter.js";
 import { Observer } from "json-server/lib/adapters/observer.js";
 import { Low } from "lowdb";
 import { JSONFile } from "lowdb/node";
@@ -18,7 +17,8 @@ if (!existsSync(file)) {
   process.exit(1);
 }
 
-const observer = new Observer(new NormalizedAdapter(new JSONFile(file)));
+// JSON Server's normalized adapter turns numeric ids into strings, which sorts "9" before "60".
+const observer = new Observer(new JSONFile(file));
 const db = new Low(observer, {});
 await db.read();
 

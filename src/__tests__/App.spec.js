@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { flushPromises, mount } from "@vue/test-utils";
+import { createPinia } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 import { createVuetify } from "vuetify";
 
@@ -14,7 +15,7 @@ describe("App", () => {
         observe() {}
         unobserve() {}
         disconnect() {}
-      },
+      }
     );
   });
 
@@ -29,7 +30,7 @@ describe("App", () => {
     });
     const wrapper = mount(App, {
       global: {
-        plugins: [createVuetify(), router],
+        plugins: [createPinia(), createVuetify(), router],
       },
     });
 
