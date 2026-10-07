@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "application-write",
+  "title": "Application write body",
+  "description": "Shared body for POST /applications and PUT /applications/:id. The server assigns id and createdAt.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["title", "type", "status", "assignee", "amount"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "enum": ["послуга", "товар"]
+    },
+    "status": {
+      "enum": ["нова", "в роботі", "виконана", "скасована"]
+    },
+    "assignee": {
+      "type": "string",
+      "minLength": 1
+    },
+    "amount": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "deadline": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "quantity": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "послуга" }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "required": ["deadline"]
+      },
+      "else": {
+        "required": ["quantity"]
+      }
+    }
+  ]
+}

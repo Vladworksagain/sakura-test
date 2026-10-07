@@ -1,4 +1,5 @@
 {
+  "$schema": "./schemas/application.json",
   "applications": [
     {
       "id": 1,
