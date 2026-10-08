@@ -1,50 +1,41 @@
 # sakura-test
 
-This template should help get you started developing with Vue 3 in Vite.
+## Як запустити локально
 
-## Recommended IDE Setup
+- Node.js `^22.18.0` або `^24.0.0`.
+- У корені проєкту:
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+1. `npm install`
+2. `npm run dev:full` — одночасно клієнт і API.
+   - Клієнт: http://localhost:5173/
+   - API: http://127.0.0.1:3001
+3. Окремо, якщо потрібен лише один процес:
+   - `npm run dev` — Vite.
+   - `npm run server` — JSON Server.
+4. `npm run test` — прогін тестів.
 
-## Recommended Browser Setup
+Адреса API береться з `VITE_API_URL`. Для локальної розробки вона вже стоїть у `.env.development`, зразок — у `.env.example`.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## Рішення
 
-## Customize configuration
+В проєкті я використав ті бібліотеки які були зазначенні в ТЗ. Структуру проєкту здебільшого я показав у відео, але є деякі моменти які не увійшли до відео. Проєкт я повністю збудував на vuetify, тільки моб версію я зробив на медіа запитах без використання бібліотеки. Також в деяких компонентах я продемонстрував різну варіацію роботи з v-model в компонентах, зазвичай ми рахуємо 3 варіанти реалізації роботи з v-model.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+1. За допомогою get, set.
+2. model-value, @update:model-value
+3. defineModel()
 
-## Project Setup
+В проєкті я використав 2 варіанти це класичний model-value + @update:model-value і більш сучасний defineModel. Цим я хотів показати що реалізувати зявзок можна як мінімум 2 варіантами, також я залишив приклади використання іменної реалізації defineModel і звичайної:
 
-```sh
-pnpm install
-```
+- з ім'ям: [TableFilters.vue](src/components/TableFilters.vue) — `defineModel("search")`, `defineModel("status")`
+- без імені: [BaseTextInput.vue](src/ui/input/BaseTextInput.vue) — `defineModel()`
+  і
 
-### Compile and Hot-Reload for Development
+## Компроміси
 
-```sh
-pnpm dev
-```
+Більшість рішень яких я приймав під час виконання тз не булии такими нагальними, тобто в реалізації таблиці і форми створення/редагування я спокійно міг обійтись без використання pinia, так як вважаю це недоцільниим конкретно в данній реалізації тз, але теоретчно якщоб додаток масштабувався в плані перевикористання даних з таблиці для будь-яких інших сторінок тоді зберігати дані таблиці в централізованому сховищі булоб доцільно.
 
-### Compile and Minify for Production
+## Що далі
 
-```sh
-pnpm build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-pnpm test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-pnpm lint
-```
+Як мініму створить детальну сторінку товару/послуги.
+Розвивати Ui для юзера, з креативним дизайнером можна булоб створити набагато кращий інтерфейс.
+Спокійно можна булоб створити систему обміну послугами/товаром між юзерами тд.тп.
