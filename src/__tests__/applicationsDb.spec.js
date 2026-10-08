@@ -27,15 +27,22 @@ describe("applications mock", () => {
       expect(Number.isNaN(Date.parse(application.createdAt))).toBe(false);
       expect(ids.has(application.id)).toBe(false);
       ids.add(application.id);
+    }
 
-      if (application.type === "послуга") {
-        expect(application.deadline).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-        expect(application).not.toHaveProperty("quantity");
-      } else {
-        expect(application.quantity).toEqual(expect.any(Number));
-        expect(application.quantity).toBeGreaterThan(0);
-        expect(application).not.toHaveProperty("deadline");
-      }
+    const services = db.applications.filter((application) => application.type === "послуга");
+    const goods = db.applications.filter((application) => application.type === "товар");
+
+    expect(services.length + goods.length).toBe(db.applications.length);
+
+    for (const application of services) {
+      expect(application.deadline).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(application).not.toHaveProperty("quantity");
+    }
+
+    for (const application of goods) {
+      expect(application.quantity).toEqual(expect.any(Number));
+      expect(application.quantity).toBeGreaterThan(0);
+      expect(application).not.toHaveProperty("deadline");
     }
   });
 });

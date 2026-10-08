@@ -24,18 +24,22 @@ function buildUrl(path, query) {
 
 export async function apiFetch(path, { method = "GET", query, body, headers } = {}) {
   const hasBody = body !== undefined;
+  const request = {
+    method,
+    headers: {
+      ...(hasBody ? { "Content-Type": "application/json" } : {}),
+      ...headers,
+    },
+  };
+
+  if (hasBody) {
+    request.body = JSON.stringify(body);
+  }
 
   let response;
 
   try {
-    response = await fetch(buildUrl(path, query), {
-      method,
-      headers: {
-        ...(hasBody ? { "Content-Type": "application/json" } : {}),
-        ...headers,
-      },
-      body: hasBody ? JSON.stringify(body) : undefined,
-    });
+    response = await fetch(buildUrl(path, query), request);
   } catch {
     throw new Error("Cannot reach the API. Start it with npm run server.");
   }
