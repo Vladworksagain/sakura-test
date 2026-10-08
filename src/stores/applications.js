@@ -29,10 +29,25 @@ export const useApplicationsStore = defineStore("applications", () => {
     }
   };
 
+  const fetchApplication = (id) => apiFetch(`/applications/${id}`);
+
+  const createApplication = (payload) => apiFetch("/applications", { method: "POST", body: payload });
+
+  const updateApplication = (id, payload) => apiFetch(`/applications/${id}`, { method: "PUT", body: payload });
+
   // getters //
   const getApplications = computed(() => applications.value);
   const getLoading = computed(() => loading.value);
   const getPaginationMeta = computed(() => paginationMeta.value);
 
-  return { applications, fetchApplications, getApplications, getLoading, getPaginationMeta };
+  return {
+    applications,
+    fetchApplications,
+    fetchApplication,
+    createApplication,
+    updateApplication,
+    getApplications,
+    getLoading,
+    getPaginationMeta,
+  };
 });

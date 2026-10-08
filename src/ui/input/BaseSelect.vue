@@ -51,8 +51,12 @@ defineProps({
     default: () => ({}),
   },
   hideDetails: {
-    type: Boolean,
+    type: [Boolean, String],
     default: true,
+  },
+  errorMessages: {
+    type: [String, Array],
+    default: "",
   },
   clearable: {
     type: Boolean,
@@ -86,6 +90,7 @@ const hasSlot = (name) => {
     :return-object="returnObject"
     :loading="loading"
     :hide-details="hideDetails"
+    :error-messages="errorMessages"
     :clearable="clearable"
     no-data-text="Нічого не знайдено"
   >

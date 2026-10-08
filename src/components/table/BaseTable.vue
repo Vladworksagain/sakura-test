@@ -65,8 +65,8 @@ const customKeySort = computed(() => Object.fromEntries(props.headers.map((heade
       color="primary"
       @update:sort-by="emit('update:sortBy', $event)"
     >
-      <template v-for="header in headers" :key="header.key" #[`item.${header.key}`]="{ value }">
-        <slot :name="header.key" :value="value">
+      <template v-for="header in headers" :key="header.key" #[`item.${header.key}`]="{ value, item }">
+        <slot :name="header.key" :value="value" :item="item">
           {{ value }}
         </slot>
       </template>

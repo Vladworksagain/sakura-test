@@ -24,7 +24,7 @@ const props = defineProps({
   },
   prependInnerIcon: {
     type: String,
-    default: "mdi-magnify",
+    default: "",
   },
   disabled: {
     type: Boolean,
@@ -35,7 +35,7 @@ const props = defineProps({
     default: "",
   },
   hideDetails: {
-    type: Boolean,
+    type: [Boolean, String],
     default: true,
   },
   debounce: {
