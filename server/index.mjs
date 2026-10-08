@@ -2,7 +2,9 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import process from "node:process";
 import { watch } from "chokidar";
+import { cors } from "@tinyhttp/cors";
 import { createApp } from "json-server/lib/app.js";
+import { registerApplicationRoutes } from "./application-routes.mjs";
 import { Observer } from "json-server/lib/adapters/observer.js";
 import { Low } from "lowdb";
 import { JSONFile } from "lowdb/node";
@@ -28,6 +30,28 @@ const app = createApp(db, { logger: false });
 const routes = app.middleware.splice(0);
 app.use((_request, _response, next) => {
   setTimeout(() => next(), DELAY_MS);
+});
+app.use((request, response, next) => {
+  const requestedHeaders = request.headers["access-control-request-headers"]
+    ?.split(",")
+    .map((header) => header.trim())
+    .filter(Boolean);
+
+  cors({
+    allowedHeaders: requestedHeaders?.length ? requestedHeaders : ["content-type"],
+  })(request, response, next);
+});
+registerApplicationRoutes(app, db);
+app.use((request, _response, next) => {
+  const url = new URL(request.url, "http://127.0.0.1");
+  const isApplicationList = request.method === "GET" && url.pathname === "/applications";
+
+  if (isApplicationList && !url.searchParams.has("_sort")) {
+    url.searchParams.set("_sort", "-createdAt");
+    request.url = `${url.pathname}${url.search}`;
+  }
+
+  next();
 });
 app.middleware.push(...routes);
 
